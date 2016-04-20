@@ -76,7 +76,7 @@ struct slz_stream {
 };
 
 /* Functions specific to rfc1951 (deflate) */
-void slz_prepare_dist_table();
+void slz_prepare_dist_table(void);
 long slz_rfc1951_encode(struct slz_stream *strm, unsigned char *out, const unsigned char *in, long ilen, int more);
 int slz_rfc1951_init(struct slz_stream *strm, int level);
 int slz_rfc1951_finish(struct slz_stream *strm, unsigned char *buf);

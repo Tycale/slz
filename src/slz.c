@@ -550,7 +550,7 @@ static unsigned int copy_lit_huff(struct slz_stream *strm, const unsigned char *
 	}
 
 	pos = 0;
-	while (pos < len) {
+	while (pos < (uint32_t)len) {
 		send_huff(strm, buf[pos++]);
 	}
 	return len;
@@ -583,7 +583,7 @@ static inline long memmatch(const unsigned char *a, const unsigned char *b, long
 	unsigned long xor;
 
 	while (1) {
-		if (len + 2 * sizeof(long) > max) {
+		if (len + 2 * sizeof(long) > (unsigned long)max) {
 			while (len < max) {
 				if (a[len] != b[len])
 					break;
@@ -733,6 +733,7 @@ long slz_rfc1951_encode(struct slz_stream *strm, unsigned char *out, const unsig
 			refs[h].by32.word = word;
 		}
 
+#ifdef FIND_OPTIMAL_MATCH
 #if FIND_OPTIMAL_MATCH
 		/* Experimental code to see what could be saved with an ideal
 		 * longest match lookup algorithm. This one is very slow but
@@ -777,6 +778,7 @@ long slz_rfc1951_encode(struct slz_stream *strm, unsigned char *out, const unsig
 			saved += bestlen - firstlen;
 		}
 		//fprintf(stderr, "first=%d best=%d saved_total=%d\n", firstlen, bestlen, saved);
+#endif
 #endif
 
 		if ((uint32_t)ent != word) {
